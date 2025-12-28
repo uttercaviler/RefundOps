@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Claim Refund - Airline Portal</title>
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&amp;family=Inter:wght@400;500;600&amp;display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#000099", // Deep Blue from screenshot
+                        secondary: "#4CAF50", // Green accent for 'refund'
+                        "background-light": "#F0F8FF", // Very light blue/white
+                        "background-dark": "#0a0e17", // Very dark blue/black
+                        "card-light": "#ffffff",
+                        "card-dark": "#161b2c",
+                        "accent-blue": "#000099",
+                    },
+                    fontFamily: {
+                        sans: ["Inter", "sans-serif"],
+                        display: ["Poppins", "sans-serif"],
+                    },
+                    borderRadius: {
+                        DEFAULT: "0.5rem",
+                        'xl': '1rem',
+                        '2xl': '1.5rem',
+                    },
+                },
+            },
+        };
+    </script>
+    <style>
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        .dark ::-webkit-scrollbar-thumb {
+            background: #475569;
+        }
+
+        .text-gradient-green {
+            background: linear-gradient(90deg, #4CAF50 0%, #8BC34A 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+    </style>
+</head>
+
+<body
+    class="bg-background-light dark:bg-background-dark text-slate-800 dark:text-slate-200 font-sans min-h-screen flex flex-col transition-colors duration-300">
+    <div class="container mx-auto px-4 py-6 max-w-7xl">
+        <nav aria-label="Breadcrumb" class="flex text-sm text-gray-500 dark:text-gray-400 mb-8">
+            <ol class="inline-flex items-center space-x-1 md:space-x-2">
+                <li class="inline-flex items-center">
+                    <a class="hover:text-primary dark:hover:text-blue-400 transition-colors" href="#">Home</a>
+                </li>
+                <li>
+                    <span class="mx-1">&gt;</span>
+                </li>
+                <li aria-current="page">
+                    <span class="font-medium text-gray-700 dark:text-gray-200">Initiate Refund</span>
+                </li>
+            </ol>
+        </nav>
+        <div class="mb-16">
+            <h1 class="text-3xl md:text-4xl font-display font-bold mb-6 text-gray-900 dark:text-white">
+                IndiGo <span class="font-light">Claim your</span> <span class="text-secondary">refund</span>
+            </h1>
+            <div
+                class="bg-card-light dark:bg-card-dark rounded-2xl shadow-lg p-6 md:p-10 border border-gray-100 dark:border-gray-700 transition-colors">
+                <h2 class="text-xl md:text-2xl font-display font-medium mb-8 text-gray-800 dark:text-white">
+                    Please enter the details below to claim the compensation amount
+                </h2>
+                <form class="space-y-6" id="refundForm" onsubmit="event.preventDefault();">
+                    <!-- STEP 1: Identification -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-end" id="step-1">
+                        <div class="flex flex-col">
+                            <label class="font-medium text-gray-700 dark:text-gray-300 mb-2" for="pnr">PNR / Booking
+                                Reference</label>
+                            <input
+                                class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary outline-none transition-all placeholder-gray-400"
+                                id="pnr" placeholder="e.g. A2B3C4" type="text" />
+                        </div>
+                        <div class="flex flex-col">
+                            <label class="font-medium text-gray-700 dark:text-gray-300 mb-2" for="lastname">Email / Last
+                                Name</label>
+                            <input
+                                class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary outline-none transition-all placeholder-gray-400"
+                                id="lastname" placeholder="Smith" type="text" />
+                        </div>
+                        <div class="md:col-span-2">
+                            <button
+                                class="w-full bg-primary hover:bg-blue-800 text-white font-medium py-3 px-6 rounded-lg transition-all duration-200 cursor-pointer shadow-md flex items-center justify-center gap-2"
+                                onclick="showStep2()" type="button" id="nextBtn">
+                                <span>Get Booking Details</span>
+                                <span class="material-icons text-sm">arrow_forward</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- STEP 2: Refund Preference (Hidden initially) -->
+                    <div class="hidden space-y-6 border-t border-gray-200 dark:border-gray-700 pt-6 animate-fade-in"
+                        id="step-2">
+                        <div
+                            class="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg border border-blue-100 dark:border-blue-800 flex items-start gap-3">
+                            <span class="material-icons text-primary dark:text-blue-400">info</span>
+                            <div>
+                                <h4 class="font-bold text-primary dark:text-blue-400 text-sm">Flight Cancelled</h4>
+                                <p class="text-xs text-gray-600 dark:text-gray-400">We regret to inform you that flight
+                                    6E-234 has been cancelled. You are eligible for a full refund.</p>
+                            </div>
+                        </div>
+
+                        <!-- Reason & Remarks Section -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="flex flex-col">
+                                <label class="font-medium text-gray-700 dark:text-gray-300 mb-2"
+                                    for="refund-reason">Reason for Refund</label>
+                                <div class="relative">
+                                    <select
+                                        class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary outline-none appearance-none cursor-pointer"
+                                        id="refund-reason">
+                                        <option value="">Select Reason...</option>
+                                        <option value="cancelled">Flight Cancelled by Airline</option>
+                                        <option value="medical">Medical Emergency</option>
+                                        <option value="personal">Personal Reasons</option>
+                                    </select>
+                                    <span
+                                        class="material-icons absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none">expand_more</span>
+                                </div>
+                            </div>
+                            <div class="flex flex-col">
+                                <label class="font-medium text-gray-700 dark:text-gray-300 mb-2"
+                                    for="refund-remarks">Remarks (Optional)</label>
+                                <textarea
+                                    class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary outline-none transition-all placeholder-gray-400"
+                                    id="refund-remarks" placeholder="Add comments..." rows="1"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="flex flex-col">
+                                <label class="font-medium text-gray-700 dark:text-gray-300 mb-2"
+                                    for="refund-mode">Refund Mode Preference</label>
+                                <div class="relative">
+                                    <select
+                                        class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary outline-none appearance-none cursor-pointer"
+                                        id="refund-mode">
+                                        <option value="credit">Strict 6E Credit Shell (Valid 1 year)</option>
+                                        <option value="original">Back to Source (Bank Transfer)</option>
+                                    </select>
+                                    <span
+                                        class="material-icons absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none">expand_more</span>
+                                </div>
+                            </div>
+                            <div class="flex flex-col justify-end">
+                                <label
+                                    class="flex items-center gap-3 cursor-pointer p-3 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+                                    <input class="w-5 h-5 text-primary rounded focus:ring-primary" id="terms-check"
+                                        type="checkbox" />
+                                    <span class="text-sm text-gray-600 dark:text-gray-400">I accept the refund terms &
+                                        conditions.</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <button
+                            class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-4 px-6 rounded-lg transition-all duration-200 cursor-pointer shadow-lg transform hover:-translate-y-1 flex items-center justify-center gap-2"
+                            onclick="window.location.href='indigo_success.html'" type="button" id="submitBtn">
+                            <span class="material-icons">check_circle</span>
+                            <span>Confirm Refund to Bank</span>
+                        </button>
+                    </div>
+                </form>
+
+                <script>
+                    function showStep2() {
+                        const pnr = document.getElementById('pnr').value;
+                        const last = document.getElementById('lastname').value;
+                        if (pnr && last) {
+                            // Simulate loading
+                            const btn = document.getElementById('nextBtn');
+                            const originalText = btn.innerHTML;
+                            btn.innerHTML = '<span class="animate-spin material-icons">refresh</span> Fetching...';
+
+                            setTimeout(() => {
+                                document.getElementById('step-1').classList.add('opacity-50', 'pointer-events-none');
+                                document.getElementById('step-2').classList.remove('hidden');
+                                btn.innerHTML = '<span class="material-icons">check</span> Booking Retrieved';
+                                btn.classList.replace('bg-primary', 'bg-green-600');
+                            }, 1500); // 1.5s delay for realism
+                        }
+                    }
+                </script>
+            </div>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-20">
+            <div
+                class="bg-primary text-white rounded-2xl p-8 relative overflow-hidden flex flex-col justify-between min-h-[280px] lg:col-span-1 md:col-span-2 shadow-xl group hover:shadow-2xl transition-all duration-300">
+                <div>
+                    <div class="text-5xl font-display font-bold mb-1">2,200+</div>
+                </div>
+                <div class="relative z-10">
+                    <div class="text-3xl font-display font-medium leading-tight">Daily<br />Flights</div>
+                </div>
+                <div
+                    class="absolute right-6 bottom-24 bg-white/20 backdrop-blur-sm p-3 rounded-full w-12 h-12 flex items-center justify-center hover:bg-white/30 transition-colors cursor-pointer group-hover:scale-110 duration-300">
+                    <span class="material-symbols-outlined text-white transform rotate-45">flight</span>
+                </div>
+                <div class="absolute -right-10 -bottom-10 w-40 h-40 bg-blue-800 rounded-full opacity-50 blur-2xl"></div>
+            </div>
+            <div class="lg:col-span-3 md:col-span-2 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
+                <div
+                    class="bg-card-light dark:bg-card-dark border border-blue-100 dark:border-gray-700 rounded-2xl p-8 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-center min-h-[200px]">
+                    <div class="text-primary dark:text-blue-400 text-4xl font-display font-bold mb-2">90+</div>
+                    <div class="text-xl text-primary dark:text-gray-300 font-display">Domestic<br />Destinations</div>
+                </div>
+                <div
+                    class="bg-card-light dark:bg-card-dark border border-blue-100 dark:border-gray-700 rounded-2xl p-8 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-center min-h-[200px]">
+                    <div class="text-primary dark:text-blue-400 text-4xl font-display font-bold mb-2">40+</div>
+                    <div class="text-xl text-primary dark:text-gray-300 font-display">International<br />Destinations
+                    </div>
+                </div>
+                <div
+                    class="bg-card-light dark:bg-card-dark border border-blue-100 dark:border-gray-700 rounded-2xl p-8 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-center min-h-[200px]">
+                    <div class="text-primary dark:text-blue-400 text-4xl font-display font-bold mb-2">750 Mn+</div>
+                    <div class="text-xl text-primary dark:text-gray-300 font-display">Happy<br />Customers</div>
+                </div>
+                <div
+                    class="bg-card-light dark:bg-card-dark border border-blue-100 dark:border-gray-700 rounded-2xl p-8 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-center min-h-[200px]">
+                    <div class="text-primary dark:text-blue-400 text-4xl font-display font-bold mb-2">400+</div>
+                    <div class="text-xl text-primary dark:text-gray-300 font-display">Fleet<br />Strong</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer class="bg-primary text-white mt-auto pt-16 pb-8 rounded-t-[2.5rem] relative overflow-hidden">
+        <div
+            class="absolute top-10 right-0 bg-white text-primary px-4 py-3 rounded-l-xl shadow-lg cursor-pointer hover:bg-gray-100 transition-colors z-20 hidden lg:block">
+            <span class="material-icons">chat</span>
+        </div>
+        <div class="container mx-auto px-4 max-w-7xl">
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8 mb-16">
+                <div class="space-y-4">
+                    <h3 class="font-bold text-sm uppercase tracking-wider mb-4 text-blue-200">Company</h3>
+                    <ul class="space-y-2 text-sm font-light text-blue-50">
+                        <li><a class="hover:underline hover:text-white transition-colors" href="#">About us</a></li>
+                        <li><a class="hover:underline hover:text-white transition-colors" href="#">IndiGo Green – ESG
+                                report</a></li>
+                        <li><a class="hover:underline hover:text-white transition-colors" href="#">6E Embrace -
+                                Diversity Equity &amp; Inclusion</a></li>
+                        <li><a class="hover:underline hover:text-white transition-colors" href="#">IndiGoReach - Our CSR
+                                initiatives</a></li>
+                        <li><a class="hover:underline hover:text-white transition-colors" href="#">Board of
+                                Directors</a></li>
+                        <li><a class="hover:underline hover:text-white transition-colors" href="#">Leadership Team</a>
+                        </li>
+                        <li><a class="hover:underline hover:text-white transition-colors" href="#">Investor
+                                Relations</a></li>
+                        <li><a class="hover:underline hover:text-white transition-colors" href="#">InterGlobe
+                                Enterprises</a></li>
+                        <li><a class="hover:underline hover:text-white transition-colors" href="#">RPWD - Equal
+                                Opportunity Policy</a></li>
+                        <li><a class="hover:underline hover:text-white transition-colors" href="#">Transgender Persons
+                                Policy</a></li>
+                        <li><a class="hover:underline hover:text-white transition-colors" href="#">HIV/AIDS workplace
+                                policy</a></li>
+                        <li><a class="hover:underline hover:text-white transition-colors" href="#">Seat/Aircraft
+                                information</a></li>
+                    </ul>
+                </div>
+                <div class="space-y-4">
+                    <h3 class="font-bold text-sm uppercase tracking-wider mb-4 text-blue-200">Support</h3>
+                    <ul class="space-y-2 text-sm font-light text-blue-50">
+                        <li><a class="hover:underline hover:text-white transition-colors" href="#">Plan B</a></li>
+                        <li><a class="hover:underline hover:text-white transition-colors" href="#">Special/Disability
+                                Assistance</a></li>
+                        <li><a class="hover:underline hover:text-white transition-colors" href="#">Medical
+                                Assistance</a></li>
+                        <li><a class="hover:underline hover:text-white transition-colors" href="#">Seat Select</a></li>
+                        <li><a class="hover:underline hover:text-white transition-colors" href="#">6E Eats</a></li>
+                        <li><a class="hover:underline hover:text-white transition-colors" href="#">Add-ons &amp;
+                                Services</a></li>
+                        <li><a class="hover:underline hover:text-white transition-colors" href="#">Baggage</a></li>
+                        <li><a class="hover:underline hover:text-white transition-colors" href="#">Refund Claim</a></li>
+                        <li><a class="hover:underline hover:text-white transition-colors" href="#">Charter Services</a>
+                        </li>
+                        <li><a class="hover:underline hover:text-white transition-colors" href="#">Hotels</a></li>
+                        <li><a class="hover:underline hover:text-white transition-colors" href="#">6Eskai</a></li>
+                        <li><a class="hover:underline hover:text-white transition-colors" href="#">Contact Us</a></li>
+                        <li><a class="hover:underline hover:text-white transition-colors" href="#">IndiGo CarGo</a></li>
+                        <li><a class="hover:underline hover:text-white transition-colors" href="#">Tax exemption</a>
+                        </li>
+                        <li><a class="hover:underline hover:text-white transition-colors" href="#">FAQ's</a></li>
+                    </ul>
+                </div>
+                <div class="space-y-4">
+                    <h3 class="font-bold text-sm uppercase tracking-wider mb-4 text-blue-200">Quick Links</h3>
+                    <ul class="space-y-2 text-sm font-light text-blue-50">
+                        <li><a class="hover:underline hover:text-white transition-colors" href="#">Tariff Sheet</a></li>
+                        <li><a class="hover:underline hover:text-white transition-colors" href="#">Developer Portal</a>
+                        </li>
+                        <li><a class="hover:underline hover:text-white transition-colors" href="#">Offers</a></li>
+                        <li><a class="hover:underline hover:text-white transition-colors" href="#">Careers</a></li>
+                        <li><a class="hover:underline hover:text-white transition-colors" href="#">Advertise with us</a>
+                        </li>
+                        <li><a class="hover:underline hover:text-white transition-colors" href="#">Sitemap</a></li>
+                        <li><a class="hover:underline hover:text-white transition-colors" href="#">Destinations</a></li>
+                        <li><a class="hover:underline hover:text-white transition-colors" href="#">Blogs</a></li>
+                        <li><a class="hover:underline hover:text-white transition-colors" href="#">Terms and
+                                Conditions</a></li>
+                        <li><a class="hover:underline hover:text-white transition-colors" href="#">Conditions of
+                                carriage</a></li>
+                        <li><a class="hover:underline hover:text-white transition-colors" href="#">Privacy Policy</a>
+                        </li>
+                        <li><a class="hover:underline hover:text-white transition-colors" href="#">Disclaimer</a></li>
+                        <li><a class="hover:underline hover:text-white transition-colors" href="#">International Travel
+                                Tips</a></li>
+                        <li><a class="hover:underline hover:text-white transition-colors" href="#">Web check-in
+                                advisory</a></li>
+                        <li><a class="hover:underline hover:text-white transition-colors" href="#">Purchase
+                                requirement</a></li>
+                        <li><a class="hover:underline hover:text-white transition-colors" href="#">Download app</a></li>
+                        <li><a class="hover:underline hover:text-white transition-colors" href="#">Flight status</a>
+                        </li>
+                        <li><a class="hover:underline hover:text-white transition-colors" href="#">Codeshare
+                                Partners</a></li>
+                        <li><a class="hover:underline hover:text-white transition-colors" href="#">Domestic Flights</a>
+                        </li>
+                        <li><a class="hover:underline hover:text-white transition-colors" href="#">International
+                                Flights</a></li>
+                        <li><a class="hover:underline hover:text-white transition-colors" href="#">Passenger Charter</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="space-y-4">
+                    <h3 class="font-bold text-sm uppercase tracking-wider mb-4 text-blue-200">Media</h3>
+                    <ul class="space-y-2 text-sm font-light text-blue-50">
+                        <li><a class="hover:underline hover:text-white transition-colors" href="#">Press releases</a>
+                        </li>
+                        <li><a class="hover:underline hover:text-white transition-colors" href="#">Our awards</a></li>
+                        <li><a class="hover:underline hover:text-white transition-colors" href="#">Testimonials</a></li>
+                        <li><a class="hover:underline hover:text-white transition-colors" href="#">Hello 6E Magazine</a>
+                        </li>
+                        <li><a class="hover:underline hover:text-white transition-colors" href="#">In-flight
+                                Entertainment</a></li>
+                    </ul>
+                </div>
+                <div class="space-y-4">
+                    <h3 class="font-bold text-sm uppercase tracking-wider mb-4 text-blue-200">Download App</h3>
+                    <div class="bg-white p-2 rounded-lg inline-block w-32 h-32">
+                        <img alt="QR Code for App Download" class="w-full h-full object-contain"
+                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuA_DVz3n7W5VJnwr9Qly060_qHEBLaKToj9ifM8CpzMj5duSD0vGWVCSKW9d55Lv01RRXzRpx86dpPO235SNx_IyzpoHEGHKwDr9kn6cLA_eo0KzW-i4ggIIVzs9byp6H50cGzRo6_gomlqIj6M4Mx4fM_8QL4X0XVWMYtBHi0TYPUVVY4pKMl_mYzatC9E3Pq9xS6KoUEJohJdsD-5NyXFF9S54vNQsL40Xcq45u-ddQgn9Yz5Ku3LV0XD7-Ry9RVCgZSTrkliK8U" />
+                    </div>
+                    <div class="text-xs text-blue-200">iOS / Android</div>
+                </div>
+            </div>
+            <div
+                class="flex flex-col md:flex-row justify-between items-start md:items-center border-t border-blue-800 pt-8 pb-8 gap-8">
+                <div class="flex flex-col gap-4">
+                    <h4 class="font-bold text-sm uppercase tracking-wider text-blue-200">Awards</h4>
+                    <div class="flex flex-wrap gap-6 items-center">
+                        <div class="flex items-center gap-3">
+                            <div
+                                class="w-10 h-10 rounded-full bg-blue-800 flex items-center justify-center border border-blue-600">
+                                <span class="material-icons text-yellow-400 text-sm">emoji_events</span>
+                            </div>
+                            <div class="text-xs leading-tight font-light">
+                                Best Low Cost<br />Airline-Asia
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <div
+                                class="w-10 h-10 rounded-full bg-blue-800 flex items-center justify-center border border-blue-600">
+                                <span class="material-icons text-yellow-400 text-sm">workspace_premium</span>
+                            </div>
+                            <div class="text-xs leading-tight font-light">
+                                Passenger Choice<br />Awards
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <div
+                                class="w-10 h-10 rounded-full bg-blue-800 flex items-center justify-center border border-blue-600">
+                                <span class="material-icons text-yellow-400 text-sm">stars</span>
+                            </div>
+                            <div class="text-xs leading-tight font-light">
+                                Best Low Cost<br />Airline-Central Asia
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex flex-col gap-4">
+                    <h4 class="font-bold text-sm uppercase tracking-wider text-blue-200 md:text-right">Social Media</h4>
+                    <div class="flex gap-4">
+                        <a class="w-8 h-8 rounded-full bg-white text-primary flex items-center justify-center hover:bg-gray-200 transition-colors"
+                            href="#">
+                            <span class="font-bold text-sm">f</span>
+                        </a>
+                        <a class="w-8 h-8 rounded-full bg-white text-primary flex items-center justify-center hover:bg-gray-200 transition-colors"
+                            href="#">
+                            <span class="font-bold text-sm">𝕏</span>
+                        </a>
+                        <a class="w-8 h-8 rounded-full bg-white text-primary flex items-center justify-center hover:bg-gray-200 transition-colors"
+                            href="#">
+                            <span class="material-icons text-sm">photo_camera</span>
+                        </a>
+                        <a class="w-8 h-8 rounded-full bg-white text-primary flex items-center justify-center hover:bg-gray-200 transition-colors"
+                            href="#">
+                            <span class="font-bold text-sm">in</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div
+                class="relative pt-8 flex flex-col md:flex-row justify-between items-center text-[10px] md:text-xs text-blue-200 gap-4">
+                <div class="absolute top-0 w-full h-px border-t border-dotted border-blue-600"></div>
+                <div class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2">
+                    <button
+                        class="w-8 h-8 bg-white text-primary rounded-full flex items-center justify-center shadow-lg hover:bg-gray-100 transition-colors"
+                        onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+                        <span class="material-icons text-sm">expand_less</span>
+                    </button>
+                </div>
+                <div class="flex flex-wrap gap-4 justify-center md:justify-start">
+                    <a class="hover:text-white" href="#">Site map</a>
+                    <a class="hover:text-white" href="#">Privacy Policy</a>
+                    <a class="hover:text-white" href="#">Terms &amp; condition</a>
+                    <a class="hover:text-white" href="#">Cookie Policy</a>
+                    <a class="hover:text-white" href="#">Cyber security</a>
+                    <a class="hover:text-white" href="#">Disclaimer</a>
+                </div>
+                <div class="text-center md:text-right space-y-1">
+                    <div>+917065145858</div>
+                    <div class="text-blue-400">Connect with us on WhatsApp</div>
+                </div>
+            </div>
+            <div class="text-center text-[10px] text-blue-400 mt-2 md:mt-0 md:text-left">
+                @Copyright 2025 IndiGo All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+</body>
+
+</html>

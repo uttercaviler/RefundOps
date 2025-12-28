@@ -1,0 +1,8 @@
+venv/
+__pycache__/
+*.pyc
+config.py
+*.png
+.env
+refundops.db
+__archive_backup__/

@@ -1,0 +1,6 @@
+@echo off
+echo Starting Backend...
+start "RefundOps Backend" ..\.venv\Scripts\uvicorn backend:app --reload --port 8000
+
+echo Starting Frontend...
+..\.venv\Scripts\streamlit run frontend.py

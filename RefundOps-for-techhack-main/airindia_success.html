@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Refund Claim Success</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=Playfair+Display:wght@700&amp;display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"
+        rel="stylesheet" />
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .font-display {
+            font-family: 'Playfair Display', serif;
+        }
+    </style>
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#ED1C24", // Air India Red
+                        "primary-dark": "#c4131a",
+                        "background-light": "#F9FAFB",
+                        "background-dark": "#111827",
+                        "surface-light": "#FFFFFF",
+                        "surface-dark": "#1F2937",
+                        "text-light": "#1F2937",
+                        "text-dark": "#F3F4F6",
+                        "border-light": "#E5E7EB",
+                        "border-dark": "#374151",
+                    },
+                    fontFamily: {
+                        display: ["Playfair Display", "serif"],
+                        sans: ["Inter", "sans-serif"],
+                    },
+                    borderRadius: {
+                        DEFAULT: "0.5rem",
+                    },
+                },
+            },
+        };
+    </script>
+</head>
+
+<body
+    class="bg-background-light dark:bg-background-dark text-text-light dark:text-text-dark transition-colors duration-200 min-h-screen flex flex-col items-center justify-center">
+
+    <div class="max-w-7xl mx-auto px-4 w-full">
+        <div
+            class="bg-surface-light dark:bg-surface-dark rounded-xl shadow-lg border border-border-light dark:border-border-dark p-10 md:p-16 text-center max-w-3xl mx-auto relative overflow-hidden">
+
+            <!-- Decorative Background Element -->
+            <div
+                class="absolute top-0 right-0 -mt-10 -mr-10 w-40 h-40 bg-primary opacity-5 rounded-full blur-3xl pointer-events-none">
+            </div>
+
+            <div
+                class="mb-8 inline-flex items-center justify-center w-24 h-24 bg-red-50 dark:bg-red-900/20 rounded-full">
+                <span class="material-symbols-outlined text-6xl text-primary">check_circle</span>
+            </div>
+
+            <h1 class="font-display text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6">
+                Refund Request Submitted
+            </h1>
+
+            <p class="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto mb-10 leading-relaxed">
+                Your refund request for <span class="font-bold text-gray-900 dark:text-white">New Refund Claim</span>
+                has been successfully processed.
+                A confirmation email with the ticket number has been sent to your registered email address.
+            </p>
+
+            <div
+                class="bg-gray-50 dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-lg p-6 mb-10 inline-block w-full max-w-md">
+                <p class="text-xs uppercase tracking-wider text-gray-500 dark:text-gray-400 font-bold mb-2">Service
+                    Request Number</p>
+                <p class="text-3xl font-mono font-bold text-primary tracking-widest">SR-AIR-2025-998</p>
+            </div>
+
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <button
+                    class="bg-primary hover:bg-primary-dark text-white font-bold py-3 px-8 rounded shadow-lg transition-transform hover:-translate-y-0.5 flex items-center justify-center">
+                    <span class="material-symbols-outlined text-sm mr-2">visibility</span>
+                    Track Status
+                </button>
+                <button
+                    class="bg-white dark:bg-transparent border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-white font-bold py-3 px-8 rounded hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+                    Back to Refunds
+                </button>
+            </div>
+
+            <div class="mt-10">
+                <a class="text-sm text-primary hover:underline flex items-center justify-center gap-1 font-medium"
+                    href="#">
+                    <span class="material-symbols-outlined text-sm">support_agent</span> Need immediate help? Contact
+                    Support
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <footer class="w-full text-center text-gray-500 text-xs mt-12 pb-8">
+        © 2025 Air India Limited. All rights reserved.
+    </footer>
+
+</body>
+
+</html>
